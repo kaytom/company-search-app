@@ -14,7 +14,6 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
-import wiremock.com.fasterxml.jackson.core.JsonProcessingException;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
@@ -23,6 +22,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 public class CompanySearchControllerIntegrationTest {
 
+    public static final String TRU_PROXY_API_URL_COMPANIES = "/TruProxyAPI/rest/Companies/v1/Search?Query=06500244";
+    public static final String TRU_PROXY_API_OFFICERS = "/TruProxyAPI/rest/Companies/v1/Officers?CompanyNumber=06500244";
     @Autowired
     private WebTestClient webTestClient;
     @RegisterExtension
@@ -40,16 +41,16 @@ public class CompanySearchControllerIntegrationTest {
     }
 
     @Test
-    void basicWireMockExample() throws JsonProcessingException {
+    void testLookupCompanyAndOfficers_ValidRequest_ResultsReturned() {
 
         wireMockServer.stubFor(
-                WireMock.get(WireMock.urlEqualTo("/TruProxyAPI/rest/Companies/v1/Search?Query=06500244"))
+                WireMock.get(WireMock.urlEqualTo(TRU_PROXY_API_URL_COMPANIES))
                         .willReturn(
                                 aResponse()
                                         .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                                         .withBodyFile("external-api/companies-response-200.json")));
         wireMockServer.stubFor(
-                WireMock.get(WireMock.urlEqualTo("/TruProxyAPI/rest/Companies/v1/Officers?CompanyNumber=06500244"))
+                WireMock.get(WireMock.urlEqualTo(TRU_PROXY_API_OFFICERS))
                         .willReturn(
                                 aResponse()
                                         .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)

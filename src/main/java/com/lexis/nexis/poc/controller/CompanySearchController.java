@@ -20,10 +20,11 @@ public class CompanySearchController {
     @GetMapping("/search")
     public ResponseEntity<?> companyLookup(
             @RequestBody CompanyLookupRequest companyLookupRequest,
-            @RequestParam(value = "activeOnly", required = true, defaultValue = "true") boolean activeOnly,
+            @RequestParam(value = "activeOnly", defaultValue = "true") boolean activeOnly,
             @RequestHeader(value = "x-api-key") String apiKey
     ) {
         logger.info("Starting search request processing");
+
         String companyName = companyLookupRequest.companyName();
         String companyNumber = companyLookupRequest.companyNumber();
 

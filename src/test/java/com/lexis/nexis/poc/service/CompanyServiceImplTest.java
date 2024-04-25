@@ -40,12 +40,10 @@ public class CompanyServiceImplTest {
 
         AtomicReference<CompanySearchResult> companySearchResult = null;
 
-        Exception exception = assertThrows(WebClientResponseException.class, () -> {
-            companySearchResult.set(companyService.lookupCompanyAndOfficers(
-                    mockRequest,
-                    activeOnly,
-                    apiKey));
-        });
+        Exception exception = assertThrows(WebClientResponseException.class, () -> companySearchResult.set(companyService.lookupCompanyAndOfficers(
+                mockRequest,
+                activeOnly,
+                apiKey)));
 
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains("403 Forbidden from GET"));
